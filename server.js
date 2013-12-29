@@ -22,41 +22,56 @@ context = {
     }
 };
 
+function setHeaders(req, res) {
+    var ref = req.get('Referer');
+    ref = ref.match(/(.*)\/$/)[0];
+    res.set('Access-Control-Allow-Origin', ref);
+}
+
 app.use(express.bodyParser());
 
 app.get('/places', function(req, res) {
+    setHeaders(req, res);
     places.getPlaces(context, req, res);
 });
 
 app.post('/places', function(req, res) {
+    setHeaders(req, res);
     places.createNewPlace(context, req, res);
 });
 
 app.get('/places/:place_id', function(req, res) {
+    setHeaders(req, res);
     places.getById(context, req, res);
 });
 
 app.delete('/places/:place_id', function(req, res) {
+    setHeaders(req, res);
     places.deletePlace(context, req, res);
 });
 
 app.get('/places/:place_id/logs', function(req, res) {
+    setHeaders(req, res);
     logs.getByPlace(context, req, res);
 });
 
 app.post('/places/:place_id/logs', function(req, res) {
+    setHeaders(req, res);
     logs.addNewPlaceLog(context, req, res);
 });
 
 app.get('/logs', function(req, res) {
+    setHeaders(req, res);
     logs.getLogs(context, req, res);
 });
 
 app.get('/logs/:log_id', function(req, res) {
+    setHeaders(req, res);
     logs.getById(context, req, res);
 });
 
 app.delete('/logs/:log_id', function(req, res) {
+    setHeaders(req, res);
     logs.deleteLog(context, req, res);
 });
 

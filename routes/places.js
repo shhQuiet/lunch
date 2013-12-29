@@ -11,9 +11,6 @@ function getCollection(ctx) {
 
 exports.getPlaces = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {
-        var ref = req.get('Referer');
-        result.forEach(ctx.convertToExternal);
-        res.set('Access-Control-Allow-Origin', ref);
         res.send({
             places: result
         });
