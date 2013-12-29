@@ -49,8 +49,13 @@ exports.updatePlace = function(ctx, req, res) {
             res.send(500, err);
             throw err;
         }
-        res.send(200, {
-            places: [obj]
+        getCollection(ctx).find({
+            _id: place._id
+        }, function(err, newPlace) {
+            obj.forEach(ctx.convertToExternal);
+            res.send(200, {
+                places: [newPlace]
+            });
         });
     });
 };
