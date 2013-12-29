@@ -38,10 +38,13 @@ exports.deletePlace = function(ctx, req, res) {
 };
 
 exports.updatePlace = function(ctx, req, res) {
+    var place = req.body;
+    place._id = req.params.place_id;
+    delete place.id;
+
     console.log('Updating place ' + req.params.place_id);
-    getCollection(ctx).remove({
-        _id: new ctx.mongodb.ObjectID(req.params.place_id)
-    }, function(err, obj) {
+
+    getCollection(ctx).save(place, function(err, obj) {
         if (err) {
             res.send(500, err);
             throw err;
