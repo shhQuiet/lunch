@@ -78,7 +78,8 @@ app.delete('/logs/:log_id', function(req, res) {
 app.options('*', function(req, res) {
     console.log('Processing OPTIONS');
     setHeaders(req, res);
-    res.removeHeader("Content-Type");
+    res.setHeader('Access-Control-Allow-Headers', 'content-type, accept');
+    // res.removeHeader("Content-Type");
     res.send(200);
 });
 
