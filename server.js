@@ -75,6 +75,10 @@ app.delete('/logs/:log_id', function(req, res) {
     logs.deleteLog(context, req, res);
 });
 
+app.options('*', function(req, res) {
+    setHeaders(req, res);
+    res.send(200);
+})
 
 mongodb.MongoClient.connect(dbUrl, function(err, ref) {
     var port = process.env.PORT || 3000;
