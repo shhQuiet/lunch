@@ -11,6 +11,11 @@ function getCollection(ctx) {
 
 exports.getPlaces = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {
+        if (err) {
+            res.send(500, err);
+            throw err;
+        }
+        result.forEach(ctx.convertToExternal);
         res.send({
             places: result
         });
