@@ -62,10 +62,11 @@ app.delete('/logs/:log_id', function(req, res) {
 
 
 mongodb.MongoClient.connect(dbUrl, function(err, ref) {
+    var port = process.env.PORT || 3000;
     if (err) {
         throw err;
     }
     context.db = ref;
-    app.listen(3000);
-    console.log('Database connected, listening at port 3000');
+    app.listen(port);
+    console.log('Database connected, listening at port ' + port);
 });
