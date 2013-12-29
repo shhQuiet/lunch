@@ -52,7 +52,7 @@ exports.updatePlace = function(ctx, req, res) {
         getCollection(ctx).find({
             _id: place._id
         }, function(err, newPlace) {
-            obj.forEach(ctx.convertToExternal);
+            newPlace.forEach(ctx.convertToExternal);
             res.send(200, {
                 places: [newPlace]
             });
