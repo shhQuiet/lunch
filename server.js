@@ -23,9 +23,16 @@ context = {
 };
 
 function setHeaders(req, res) {
-    res.set('Access-Control-Allow-Origin', req.get('Origin'));
-    res.set('Access-Control-Allow-Methods', req.get('Access-Control-Request-Method'));
-    res.set('Access-Control-Allow-Headers'), req.get('Access-Control-Request-Headers')
+    var o = req.get('Origin'),
+        m = req.get('Access-Control-Request-Method'),
+        h = req.get('Access-Control-Request-Headers');
+
+    console.log('o:' + o);
+    console.log('m:' + m);
+    console.log('h:' + h);
+    res.set('Access-Control-Allow-Origin', o);
+    res.set('Access-Control-Allow-Methods', m);
+    res.set('Access-Control-Allow-Headers', h);
 }
 
 app.use(express.bodyParser());
