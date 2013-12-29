@@ -24,7 +24,7 @@ context = {
 
 function setHeaders(req, res) {
     var ref = req.get('Referer');
-    ref = ref.match(/(.*)\/$/)[0];
+    ref = ref.match(/(.*)\/$/)[1];
     res.set('Access-Control-Allow-Origin', ref);
 }
 
