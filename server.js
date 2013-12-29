@@ -78,7 +78,7 @@ app.delete('/logs/:log_id', function(req, res) {
 app.options('*', function(req, res) {
     console.log('Processing OPTIONS');
     setHeaders(req, res);
-    res.setHeader('Access-Control-Allow-Methods', 'get, put, post, delete, options');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'content-type, accept');
     res.send(200);
 });
