@@ -77,7 +77,7 @@ app.delete('/logs/:log_id', function(req, res) {
 
 app.options('*', function(req, res) {
     setHeaders(req, res);
-    res.removeHeader("Content-type");
+    res.removeHeader("Content-Type");
     res.send(200);
 })
 
