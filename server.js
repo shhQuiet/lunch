@@ -3,7 +3,8 @@ var express = require('express'),
     context,
     mongodb = require('mongodb'),
     // dbUrl = "mongodb://localhost:27017/lunch",
-    dbUrl = "mongodb://luncheon:is_served@alex.mongohq.com:10055/lunch",
+    // mongodb://<user>:<password>@linus.mongohq.com:10089/app20771452
+    dbUrl = "mongodb://luncheon:is_served@linus.mongohq.com:10089/app20771452",
     places = require('./routes/places.js'),
     logs = require('./routes/logs.js');
 
