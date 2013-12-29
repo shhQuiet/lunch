@@ -23,9 +23,9 @@ context = {
 };
 
 function setHeaders(req, res) {
-    var ref = req.get('Referer');
-    ref = ref.match(/(.*)\/$/)[1];
-    res.set('Access-Control-Allow-Origin', ref);
+    res.set('Access-Control-Allow-Origin', req.get('Origin'));
+    res.set('Access-Control-Allow-Methods', req.get('Access-Control-Request-Method'));
+    res.set('Access-Control-Allow-Headers'), req.get('Access-Control-Request-Headers')
 }
 
 app.use(express.bodyParser());
@@ -78,8 +78,8 @@ app.delete('/logs/:log_id', function(req, res) {
 app.options('*', function(req, res) {
     console.log('Processing OPTIONS');
     setHeaders(req, res);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'content-type, accept');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+    // res.setHeader('Access-Control-Allow-Headers', 'content-type, accept');
     res.send(200);
 });
 
