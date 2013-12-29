@@ -12,7 +12,7 @@ function getCollection(ctx) {
 exports.getPlaces = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {
         result.forEach(ctx.convertToExternal);
-        res.send({
+        res.jsonp({
             places: result
         });
     });
