@@ -39,8 +39,8 @@ exports.deletePlace = function(ctx, req, res) {
 
 exports.updatePlace = function(ctx, req, res) {
     var place = req.body;
-    place._id = req.params.place_id;
     delete place.id;
+    place._id = req.params.place_id;
 
     console.log('Updating place ' + req.params.place_id);
 
@@ -54,7 +54,7 @@ exports.updatePlace = function(ctx, req, res) {
         }, function(err, newPlace) {
             newPlace.forEach(ctx.convertToExternal);
             res.send(200, {
-                places: [newPlace]
+                place: newPlace
             });
         });
     });
