@@ -52,6 +52,10 @@ app.get('/places/:place_id', function(req, res) {
     places.getById(context, req, res);
 });
 
+app.put('/places/:place_id', function(req, res) {
+    setHeaders(req, res);
+    places.updatePlace(ctx, req, res);
+})
 app.delete('/places/:place_id', function(req, res) {
     setHeaders(req, res);
     places.deletePlace(context, req, res);

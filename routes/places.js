@@ -37,6 +37,20 @@ exports.deletePlace = function(ctx, req, res) {
     });
 };
 
+exports.updatePlace = function(ctx, req, res) {
+    console.log('Updating place ' + req.params.place_id);
+    getCollection(ctx).remove({
+        _id: new ctx.mongodb.ObjectID(req.params.place_id)
+    }, function(err, obj) {
+        if (err) {
+            res.send(500, err);
+            throw err;
+        }
+        res.send(200, {
+            places: [obj]
+        });
+    });
+};
 exports.createNewPlace = function(ctx, req, res) {
     var newPlace = req.body;
     ctx.newId(newPlace);
