@@ -6,7 +6,8 @@
     "author": "Steve Horne",
     "dependencies": {
         "express": "~3.4.7",
-        "mongodb": "~1.4.0-rc3"
+        "mongodb": "~1.4.0-rc3",
+        "nconf": "0.6.9"
     },
     "engines": {
         "node": "0.8.21",
