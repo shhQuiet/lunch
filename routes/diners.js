@@ -1,4 +1,4 @@
-var collName = 'places',
+var collName = 'diners',
     coll = null;
 
 function getCollection(ctx) {
@@ -9,7 +9,7 @@ function getCollection(ctx) {
     return coll;
 };
 
-exports.getPlaces = function(ctx, req, res) {
+exports.getDiners = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {
         if (err) {
             res.send(500, err);
@@ -17,15 +17,15 @@ exports.getPlaces = function(ctx, req, res) {
         }
         result.forEach(ctx.convertToExternal);
         res.send({
-            places: result
+            diners: result
         });
     });
 };
 
-exports.deletePlace = function(ctx, req, res) {
-    console.log('Removing place ' + req.params.place_id);
+exports.deleteDiner = function(ctx, req, res) {
+    console.log('Removing diner ' + req.params.diner_id);
     getCollection(ctx).remove({
-        _id: new ctx.mongodb.ObjectID(req.params.place_id)
+        _id: new ctx.mongodb.ObjectID(req.params.diner_id)
     }, function(err, obj) {
         if (err) {
             res.send(500, err);
@@ -35,55 +35,55 @@ exports.deletePlace = function(ctx, req, res) {
     });
 };
 
-exports.updatePlace = function(ctx, req, res) {
-    var place = req.body.place;
-    delete place.id;
-    place._id = new ctx.mongodb.ObjectID(req.params.place_id);
+exports.updateDiner = function(ctx, req, res) {
+    var diner = req.body.diner;
+    delete diner.id;
+    diner._id = new ctx.mongodb.ObjectID(req.params.diner_id);
 
-    console.log('Updating place ' + JSON.stringify(place));
+    console.log('Updating diner ' + JSON.stringify(diner));
 
-    getCollection(ctx).save(place, function(err, obj) {
+    getCollection(ctx).save(diner, function(err, obj) {
         if (err) {
             res.send(500, err);
             throw err;
         }
         getCollection(ctx).find({
-            _id: place._id
-        }).toArray(function(err, newPlaces) {
-            newPlaces.forEach(ctx.convertToExternal);
+            _id: diner._id
+        }).toArray(function(err, newDiners) {
+            newDiners.forEach(ctx.convertToExternal);
             res.send(200, {
-                place: newPlaces[0]
+                diner: newDiners[0]
             });
         });
     });
 };
 
-exports.createNewPlace = function(ctx, req, res) {
-    var newPlace = req.body.place;
-    ctx.newId(newPlace);
-    console.log('new place:' + JSON.stringify(newPlace));
-    getCollection(ctx).insert(newPlace, function(err, obj) {
+exports.createNewDiner = function(ctx, req, res) {
+    var newDiner = req.body.diner;
+    ctx.newId(newDiner);
+    console.log('new diner:' + JSON.stringify(newDiner));
+    getCollection(ctx).insert(newDiner, function(err, obj) {
         if (err) {
             res.send(500, err);
             throw err;
         }
         obj.forEach(ctx.convertToExternal);
         res.send(200, {
-            places: obj
+            diners: obj
         });
     });
 };
 
 exports.getById = function(ctx, req, res) {
-    var place_id = null;
+    var diner_id = null;
     try {
-        place_id = new ctx.mongodb.ObjectID(req.params.place_id);
+        diner_id = new ctx.mongodb.ObjectID(req.params.diner_id);
     } catch (e) {
         res.send(404);
         return;
     }
     getCollection(ctx).find({
-        _id: place_id
+        _id: diner_id
     }).toArray(function(err, result) {
         if (err) {
             res.send(500, err);
@@ -95,7 +95,7 @@ exports.getById = function(ctx, req, res) {
         }
         result.forEach(ctx.convertToExternal);
         res.send(200, {
-            place: result[0]
+            diner: result[0]
         });
     });
 };

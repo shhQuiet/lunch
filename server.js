@@ -2,11 +2,10 @@ var express = require('express'),
     app = express(),
     context,
     mongodb = require('mongodb'),
-    // dbUrl = "mongodb://localhost:27017/lunch",
-    // mongodb://<user>:<password>@linus.mongohq.com:10089/app20771452
-    dbUrl = "mongodb://luncheon:is_served@linus.mongohq.com:10089/app20771452",
+    dbUrl = "mongodb://localhost:27017/lunch",
     places = require('./routes/places.js'),
-    logs = require('./routes/logs.js');
+    logs = require('./routes/logs.js'),
+    diners = require('./routes/diners.js');
 
 context = {
     places: places,
@@ -17,7 +16,7 @@ context = {
         return obj;
     },
     convertToExternal: function(item) {
-        item.id = item._id;
+        item.id = item._id.toString();
         delete item._id;
     }
 };
@@ -85,6 +84,35 @@ app.delete('/logs/:log_id', function(req, res) {
     setHeaders(req, res);
     logs.deleteLog(context, req, res);
 });
+
+//
+// Diners
+//
+app.get('/diners', function(req, res) {
+    setHeaders(req, res);
+    diners.getDiners(context, req, res);
+});
+
+app.post('/diners', function(req, res) {
+    setHeaders(req, res);
+    diners.createNewDiner(context, req, res);
+});
+
+app.get('/diners/:diner_id', function(req, res) {
+    setHeaders(req, res);
+    diners.getById(context, req, res);
+});
+
+app.put('/diners/:diner_id', function(req, res) {
+    setHeaders(req, res);
+    diners.updateDiner(context, req, res);
+})
+app.delete('/diners/:diner_id', function(req, res) {
+    setHeaders(req, res);
+    diners.deleteDiner(context, req, res);
+});
+
+
 
 app.options('*', function(req, res) {
     setHeaders(req, res);
