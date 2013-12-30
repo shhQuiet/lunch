@@ -5,7 +5,8 @@ var express = require('express'),
     dbUrl = "mongodb://localhost:27017/lunch",
     places = require('./routes/places.js'),
     logs = require('./routes/logs.js'),
-    diners = require('./routes/diners.js');
+    diners = require('./routes/diners.js'),
+    nconf = require('nconf');
 
 context = {
     places: places,
@@ -34,7 +35,7 @@ function setHeaders(req, res) {
     res.set('Access-Control-Allow-Headers', h);
 }
 
-exports.start = function() {
+exports.start = function(config) {
     app.use(express.bodyParser());
 
     app.get('/places', function(req, res) {
@@ -113,15 +114,13 @@ exports.start = function() {
         diners.deleteDiner(context, req, res);
     });
 
-
-
     app.options('*', function(req, res) {
         setHeaders(req, res);
         res.send(200);
     });
 
-    mongodb.MongoClient.connect(dbUrl, function(err, ref) {
-        var port = process.env.PORT || 3000;
+    mongodb.MongoClient.connect(config.get('database:url'), function(err, ref) {
+        var port = config.get('PORT');
         if (err) {
             throw err;
         }
