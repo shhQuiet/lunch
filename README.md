@@ -1,9 +1,9 @@
 lunch
 =====
 
-*lunch* is a node.js server that uses *mongodb* as a data store and *express* as an HTTP router.
+**lunch** is a node.js server that uses **mongodb** as a data store and **express** as an HTTP router.
 
-*lunch* responds to HTTP REST requests for:
+**lunch** responds to HTTP REST requests for:
 
 - _places_ - Locations of places to eat lunch.
 - _logs_ - A log of visits to locations
