@@ -21,6 +21,6 @@ configuration
 **lunch** uses **nconf** for application configuration.  The file `config.json` contains the default configuration information:
 
 - default port is 3000
-- The default database is assumed to be on localhost at the default mongodb port of 27017.  DB named **lunch**
+- The default database is assumed to be on localhost at the default mongodb port of `27017`.  DB named `lunch`
 
-You may change these values in the environment or on the command line or by changing config.json
+You may change these values in the environment or on the command line or by changing config.json.
