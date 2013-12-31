@@ -1,7 +1,7 @@
 lunch
 =====
 
-**lunch** is a node.js server that uses [**mongodb**](https://github.com/mongodb/node-mongodb-native) as a data store and [**express**](https://github.com/visionmedia/express) <> as an HTTP router.
+**lunch** is a node.js server that uses [**mongodb**](https://github.com/mongodb/node-mongodb-native) as a data store and [**express**](https://github.com/visionmedia/express) as an HTTP router.
 
 **lunch** responds to HTTP REST requests for:
 
@@ -23,10 +23,11 @@ configuration
 **lunch** uses **nconf** for application configuration.  The file `config.json` contains the default configuration information:
 
 - default port is `3000`
-- The default database is assumed to be on localhost at the default mongodb port of `27017`.  DB named `lunch`
+- The default database is `localhost` at the default mongodb port of `27017`.  DB name: `lunch`
 
 You may change these values in the environment or on the command line or by changing config.json.
 
 For example, to connect to a different database:
 
 `$ node server.js --database:url=mongodb://myHost.com:12345/someDb`
+
