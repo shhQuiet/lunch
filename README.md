@@ -1,7 +1,7 @@
 lunch
 =====
 
-**lunch** is a node.js server that uses **mongodb** <https://github.com/mongodb/node-mongodb-native> as a data store and **express** <https://github.com/visionmedia/express> as an HTTP router.
+**lunch** is a node.js server that uses [**mongodb**](https://github.com/mongodb/node-mongodb-native) as a data store and [**express**](https://github.com/visionmedia/express) <> as an HTTP router.
 
 **lunch** responds to HTTP REST requests for:
 
