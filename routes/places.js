@@ -10,21 +10,20 @@ function getCollection(ctx) {
 };
 
 exports.initialize = function(ctx) {
-    var name = "placeName";
-    // getCollection(ctx).ensureIndex({
-    //     name: 1
-    // }, {
-    //     unique: true,
-    //     name: name
-    // }, function(err, result) {
-    //     if (err) {
-    //         console.log("Can't create index " + name);
-    //         throw err;
-    //     }
-    // });
+    getCollection(ctx).ensureIndex({
+        name: 1
+    }, {
+        unique: true
+    }, function(err, result) {
+        if (err) {
+            console.log("Can't create index!");
+            throw err;
+        }
+    });
 }
 
 exports.getPlaces = function(ctx, req, res) {
+    console.log('getPlaces()');
     getCollection(ctx).find().toArray(function(err, result) {
         if (err) {
             res.send(500, err);
@@ -38,7 +37,7 @@ exports.getPlaces = function(ctx, req, res) {
 };
 
 exports.deletePlace = function(ctx, req, res) {
-    console.log('Removing place ' + req.params.place_id);
+    console.log('deletePlace:' + req.params.place_id);
     getCollection(ctx).remove({
         _id: new ctx.mongodb.ObjectID(req.params.place_id)
     }, function(err, obj) {
@@ -52,10 +51,10 @@ exports.deletePlace = function(ctx, req, res) {
 
 exports.updatePlace = function(ctx, req, res) {
     var place = req.body.place;
+    console.log('updatePlace:' + place.name);
     delete place.id;
     place._id = new ctx.mongodb.ObjectID(req.params.place_id);
 
-    console.log('Updating place ' + place.name);
 
     getCollection(ctx).save(place, function(err, obj) {
         if (err) {
@@ -75,8 +74,8 @@ exports.updatePlace = function(ctx, req, res) {
 
 exports.createNewPlace = function(ctx, req, res) {
     var newPlace = req.body.place;
+    console.log('createNewPlace:' + newPlace.name);
     ctx.newId(newPlace);
-    console.log('new place:' + newPlace.name);
     getCollection(ctx).insert(newPlace, function(err, obj) {
         if (err) {
             if (err.code === 11000) {

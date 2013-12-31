@@ -76,6 +76,10 @@ exports.start = function(config) {
         visits.getVisits(context, req, res);
     });
 
+    app.post('/visits', preFilter, function(req, res) {
+        visits.addNewVisit(context, req, res);
+    });
+
     app.get('/visits/:visit_id', preFilter, function(req, res) {
         visits.getById(context, req, res);
     });

@@ -14,6 +14,7 @@ exports.initialize = function(ctx) {
 }
 
 exports.getVisits = function(ctx, req, res) {
+    console.log('getVisits()');
     getCollection(ctx).find().toArray(function(err, result) {
         if (err) {
             res.send(500, err);
@@ -27,7 +28,7 @@ exports.getVisits = function(ctx, req, res) {
 };
 
 exports.deleteVisit = function(ctx, req, res) {
-    console.visit('Removing visit ' + req.params.visit_id);
+    console.visit('deleteVisit:' + req.params.visit_id);
     getCollection(ctx).remove({
         _id: new ctx.mongodb.ObjectID(req.params.visit_id)
     }, function(err, obj) {
@@ -42,6 +43,7 @@ exports.deleteVisit = function(ctx, req, res) {
 }
 
 exports.getByPlace = function(ctx, req, res) {
+    console.log('getByPlace:' + req.params.place_id);
     getCollection(ctx).find({
         place_id: new ctx.mongodb.ObjectID(req.params.place_id)
     }).toArray(function(err, result) {
@@ -61,6 +63,7 @@ exports.getByPlace = function(ctx, req, res) {
 };
 
 exports.getById = function(ctx, req, res) {
+    console.log('getById:' + req.params.visit_id);
     getCollection(ctx).find({
         _id: new ctx.mongodb.ObjectID(req.params.visit_id)
     }).toArray(function(err, result) {
@@ -74,6 +77,32 @@ exports.getById = function(ctx, req, res) {
         }
         res.send(200, result);
     });
+};
+
+exports.addNewVisit = function(ctx, req, res) {
+    var newVisit = req.body.visit;
+    console.log('addNewVisit:' + newVisit.place);
+    if (!newVisit.place) {
+        res.send(400, {
+            message: "You must specify the place ID"
+        });
+        return;
+    }
+    newVisit.place = new ctx.mongodb.ObjectID(newVisit.place);
+    delete newVisit.id;
+    getCollection(ctx).insert(newVisit, function(err, obj) {
+        var result;
+        if (err) {
+            res.send(500, err);
+            throw err;
+        }
+        result = obj[0];
+        ctx.convertToExternal(result);
+        result.place = result.place.toString();
+        res.send(200, {
+            visit: result
+        });
+    })
 };
 
 exports.addNewPlaceVisit = function(ctx, req, res) {
