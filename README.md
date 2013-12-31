@@ -20,7 +20,7 @@ _visits_ can have only one _place_
 configuration
 =============
 
-**lunch** uses **nconf** for application configuration.  The file `config.json` contains the default configuration information:
+**lunch** uses [**nconf**](https://github.com/flatiron/nconf) for application configuration.  The file `config.json` contains the default configuration information:
 
 - default port is `3000`
 - The default database is `localhost` at the default mongodb port of `27017`.  DB name: `lunch`
