@@ -1,4 +1,4 @@
-var collName = 'logs',
+var collName = 'visits',
     coll = null;
 
 function getCollection(ctx) {
@@ -9,7 +9,11 @@ function getCollection(ctx) {
     return coll;
 }
 
-exports.getLogs = function(ctx, req, res) {
+exports.initialize = function(ctx) {
+
+}
+
+exports.getVisits = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {
         if (err) {
             res.send(500, err);
@@ -17,15 +21,15 @@ exports.getLogs = function(ctx, req, res) {
         }
         result.forEach(ctx.convertToExternal);
         res.send(200, {
-            logs: result
+            visits: result
         });
     });
 };
 
-exports.deleteLog = function(ctx, req, res) {
-    console.log('Removing log ' + req.params.log_id);
+exports.deleteVisit = function(ctx, req, res) {
+    console.visit('Removing visit ' + req.params.visit_id);
     getCollection(ctx).remove({
-        _id: new ctx.mongodb.ObjectID(req.params.log_id)
+        _id: new ctx.mongodb.ObjectID(req.params.visit_id)
     }, function(err, obj) {
         if (err) {
             res.send(500, err);
@@ -51,14 +55,14 @@ exports.getByPlace = function(ctx, req, res) {
         }
         result.forEach(ctx.convertToExternal);
         res.send(200, {
-            logs: result
+            visits: result
         });
     });
 };
 
 exports.getById = function(ctx, req, res) {
     getCollection(ctx).find({
-        _id: new ctx.mongodb.ObjectID(req.params.log_id)
+        _id: new ctx.mongodb.ObjectID(req.params.visit_id)
     }).toArray(function(err, result) {
         if (err) {
             res.send(500, err);
@@ -72,11 +76,11 @@ exports.getById = function(ctx, req, res) {
     });
 };
 
-exports.addNewPlaceLog = function(ctx, req, res) {
-    var newLog = req.body;
-    ctx.newId(newLog);
-    newLog.place_id = new ctx.mongodb.ObjectID(req.params.place_id);
-    getCollection(ctx).insert(newLog, function(err, obj) {
+exports.addNewPlaceVisit = function(ctx, req, res) {
+    var newVisit = req.body;
+    ctx.newId(newVisit);
+    newVisit.place_id = new ctx.mongodb.ObjectID(req.params.place_id);
+    getCollection(ctx).insert(newVisit, function(err, obj) {
         if (err) {
             res.send(500, err);
             throw err;

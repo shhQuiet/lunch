@@ -9,6 +9,10 @@ function getCollection(ctx) {
     return coll;
 };
 
+exports.initialize = function(ctx) {
+
+}
+
 exports.getDiners = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {
         if (err) {

@@ -9,6 +9,21 @@ function getCollection(ctx) {
     return coll;
 };
 
+exports.initialize = function(ctx) {
+    var name = "placeName";
+    // getCollection(ctx).ensureIndex({
+    //     name: 1
+    // }, {
+    //     unique: true,
+    //     name: name
+    // }, function(err, result) {
+    //     if (err) {
+    //         console.log("Can't create index " + name);
+    //         throw err;
+    //     }
+    // });
+}
+
 exports.getPlaces = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {
         if (err) {
@@ -40,7 +55,7 @@ exports.updatePlace = function(ctx, req, res) {
     delete place.id;
     place._id = new ctx.mongodb.ObjectID(req.params.place_id);
 
-    console.log('Updating place ' + JSON.stringify(place));
+    console.log('Updating place ' + place.name);
 
     getCollection(ctx).save(place, function(err, obj) {
         if (err) {
@@ -61,9 +76,16 @@ exports.updatePlace = function(ctx, req, res) {
 exports.createNewPlace = function(ctx, req, res) {
     var newPlace = req.body.place;
     ctx.newId(newPlace);
-    console.log('new place:' + JSON.stringify(newPlace));
+    console.log('new place:' + newPlace.name);
     getCollection(ctx).insert(newPlace, function(err, obj) {
         if (err) {
+            if (err.code === 11000) {
+                res.send(409, {
+                    message: "Name is a duplicate",
+                    name: newPlace.name
+                });
+                return;
+            }
             res.send(500, err);
             throw err;
         }

@@ -17,6 +17,5 @@ nconf.argv()
 console.log("======== Starting server ========");
 console.log("Using port    [" + nconf.get("PORT") + "]");
 console.log("Database URL  [" + nconf.get('database:url') + "]");
-console.log("=================================");
 
 lunch.start(nconf);
