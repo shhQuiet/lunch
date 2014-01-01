@@ -104,7 +104,7 @@ exports.start = function(config) {
         res.send(200);
     });
 
-    mongodb.MongoClient.connect(config.get('database:url'), function(err, ref) {
+    function appStartup(err, ref) {
         var port = config.get('PORT');
         if (err) {
             throw err;
@@ -113,5 +113,7 @@ exports.start = function(config) {
         initialize();
         app.listen(port);
         console.log('Database connected, listening at port ' + port);
-    });
+    }
+
+    mongodb.MongoClient.connect(config.get('database:url'), appStartup);
 };
