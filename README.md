@@ -1,4 +1,4 @@
-lunch
+lunch[![Travis build status](http://travis-ci.org/shhQuiet/lunch.png)](http://travis-ci.org/shhQuiet/lunch)
 =====
 
 **lunch** is a node.js server that uses [**mongodb**](https://github.com/mongodb/node-mongodb-native) as a data store and [**express**](https://github.com/visionmedia/express) as an HTTP router.
