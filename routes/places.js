@@ -1,5 +1,8 @@
+var context = null; // instance context
+
 exports.initialize = function(ctx) {
-    ctx.db.collection('places').ensureIndex({
+    context = ctx;
+    context.db.collection('places').ensureIndex({
         name: 1
     }, {
         unique: true
@@ -11,23 +14,23 @@ exports.initialize = function(ctx) {
     });
 };
 
-exports.getPlaces = function(ctx, req, res) {
+exports.getPlaces = function(req, res) {
     console.log('getPlaces()');
-    ctx.api.getCollection('places', ctx, req, res);
+    context.api.getCollection('places', context, req, res);
 };
 
-exports.deletePlace = function(ctx, req, res) {
-    ctx.api.deleteObj('place', req.params.place_id, ctx, req, res);
+exports.deletePlace = function(req, res) {
+    context.api.deleteObj('place', req.params.place_id, context, req, res);
 };
 
-exports.updatePlace = function(ctx, req, res) {
-    ctx.api.update('place', req.params.place_id, ctx, req, res);
+exports.updatePlace = function(req, res) {
+    context.api.update('place', req.params.place_id, context, req, res);
 };
 
-exports.createNewPlace = function(ctx, req, res) {
-    ctx.api.createNew('place', ctx, req, res);
+exports.createNewPlace = function(req, res) {
+    context.api.createNew('place', context, req, res);
 };
 
-exports.getById = function(ctx, req, res) {
-    ctx.api.getById('place', req.params.place_id, ctx, req, res);
+exports.getById = function(req, res) {
+    context.api.getById('place', req.params.place_id, context, req, res);
 };

@@ -4,21 +4,40 @@ var express = require('express'),
     mongodb = require('mongodb'),
     places = require('./routes/places.js'),
     visits = require('./routes/visits.js'),
-    diners = require('./routes/diners.js');
+    users = require('./routes/users.js');
 
 context = {
     places: places,
     visits: visits,
-    diners: diners,
     mongodb: mongodb,
     api: require('./api.js')
 };
 
-function preFilter(req, res, next) {
+var authFilters = {
+    admin: function(req, res, next) {
+        var auth = req.get('Authorization');
+        var admin = users.svc.getAdmin(function() {
+            if (auth !== admin.basicAuth) {
+                req.send(401);
+                return;
+            }
+            next();
+        });
+    },
+    adminOrSelf: function(req, res, next) {
+
+    },
+    defaultFilter: function(req, res, next) {
+        next();
+    }
+};
+
+function headerFilter(req, res, next) {
     var o = req.get('Origin'),
         m = req.get('Access-Control-Request-Method'),
         h = req.get('Access-Control-Request-Headers');
 
+    // ask and ye shall receive... (for CORS purposes)
     res.set('Access-Control-Allow-Origin', o);
     res.set('Access-Control-Allow-Methods', m);
     res.set('Access-Control-Allow-Headers', h);
@@ -29,83 +48,59 @@ function preFilter(req, res, next) {
 // call each module in "routes/" to initialize as well.
 
 function initialize() {
-    places.initialize(context);
-    visits.initialize(context);
-    diners.initialize(context);
+    [places, visits, users].forEach(function(module) {
+        module.initialize(context);
+    });
 }
 
 exports.start = function(config) {
 
-    app.use(express.bodyParser());
-
-    app.get('/places', preFilter, function(req, res) {
-        places.getPlaces(context, req, res);
+    app.configure(function() {
+        // app.use(express.static('public'));
+        // app.use(express.cookieParser());
+        app.use(express.bodyParser());
+        // app.use(express.session({
+        //     secret: 'soooo hungry...'
+        // }));
+        // app.use(passport.initialize());
+        // app.use(passport.session());
+        // app.use(app.router);
     });
-
-    app.post('/places', preFilter, function(req, res) {
-        places.createNewPlace(context, req, res);
-    });
-
-    app.get('/places/:place_id', preFilter, function(req, res) {
-        places.getById(context, req, res);
-    });
-
-    app.put('/places/:place_id', preFilter, function(req, res) {
-        places.updatePlace(context, req, res);
-    });
-
-    app.delete('/places/:place_id', preFilter, function(req, res) {
-        places.deletePlace(context, req, res);
-    });
-
-    app.get('/places/:place_id/visits', preFilter, function(req, res) {
-        visits.getByPlace(context, req, res);
-    });
-
-    app.post('/places/:place_id/visits', preFilter, function(req, res) {
-        visits.addNewPlaceVisit(context, req, res);
-    });
-
-    app.get('/visits', preFilter, function(req, res) {
-        visits.getVisits(context, req, res);
-    });
-
-    app.post('/visits', preFilter, function(req, res) {
-        visits.addNewVisit(context, req, res);
-    });
-
-    app.get('/visits/:visit_id', preFilter, function(req, res) {
-        visits.getById(context, req, res);
-    });
-
-    app.delete('/visits/:visit_id', preFilter, function(req, res) {
-        visits.deleteVisit(context, req, res);
-    });
-
+    ///////////////////////////////////////////////////////////////////
+    // Places
     //
-    // Diners
+    app.get('/places', headerFilter, authFilters.defaultFilter, places.getPlaces);
+    app.post('/places', headerFilter, places.createNewPlace);
+    app.get('/places/:place_id', headerFilter, places.getById);
+    app.put('/places/:place_id', headerFilter, places.updatePlace);
+    app.delete('/places/:place_id', headerFilter, places.deletePlace);
+    app.get('/places/:place_id/visits', headerFilter, visits.getByPlace);
+    app.post('/places/:place_id/visits', headerFilter, visits.addNewPlaceVisit);
+
+    ///////////////////////////////////////////////////////////////////
+    // Visits
     //
-    app.get('/diners', preFilter, function(req, res) {
-        diners.getDiners(context, req, res);
-    });
+    app.get('/visits', headerFilter, visits.getVisits);
+    app.post('/visits', headerFilter, visits.addNewVisit);
+    app.get('/visits/:visit_id', headerFilter, visits.getById);
+    app.delete('/visits/:visit_id', headerFilter, visits.deleteVisit);
 
-    app.post('/diners', preFilter, function(req, res) {
-        diners.createNewDiner(context, req, res);
-    });
+    ///////////////////////////////////////////////////////////////////
+    // Users
+    //
+    app.get('/users', headerFilter, authFilters.defaultFilter, users.getUsers);
+    app.post('/users', headerFilter, authFilters.admin, users.createNewUser);
+    app.get('/users/:user_id', headerFilter, authFilters.defaultFilter, users.getById);
+    app.put('/users/:user_id', headerFilter, authFilters.admin, users.updateUser);
+    app.delete('/users/:user_id', headerFilter, authFilters.admin, users.deleteUser);
+    app.get('/users/:user_id/visits', headerFilter, authFilters.defaultFilter);
+    app.post('/users/:user_id/visits', headerFilter, authFilters.defaultFilter);
 
-    app.get('/diners/:diner_id', preFilter, function(req, res) {
-        diners.getById(context, req, res);
-    });
+    ///////////////////////////////////////////////////////////////////
+    // Other
+    //
 
-    app.put('/diners/:diner_id', preFilter, function(req, res) {
-        diners.updateDiner(context, req, res);
-    });
-
-    app.delete('/diners/:diner_id', preFilter, function(req, res) {
-        diners.deleteDiner(context, req, res);
-    });
-
-    app.options('*', preFilter, function(req, res) {
+    app.options('*', headerFilter, function(req, res) {
         res.send(200);
     });
 
