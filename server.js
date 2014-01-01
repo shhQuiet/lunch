@@ -14,8 +14,6 @@ nconf.argv()
         file: 'config.json'
     });
 
-console.log("======== Starting server ========");
-console.log("Using port    [" + nconf.get("PORT") + "]");
-console.log("Database URL  [" + nconf.get('database:url') + "]");
+console.log("======== Starting server ========\nUsing port    [" + nconf.get("PORT") + "]\nDatabase URL  [" + nconf.get('database:url') + "]");
 
 lunch.start(nconf);

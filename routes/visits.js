@@ -15,31 +15,11 @@ exports.initialize = function(ctx) {
 
 exports.getVisits = function(ctx, req, res) {
     console.log('getVisits()');
-    getCollection(ctx).find().toArray(function(err, result) {
-        if (err) {
-            res.send(500, err);
-            throw err;
-        }
-        result.forEach(ctx.convertToExternal);
-        res.send(200, {
-            visits: result
-        });
-    });
+    ctx.getCollection('visits', ctx, req, res);
 };
 
 exports.deleteVisit = function(ctx, req, res) {
-    console.visit('deleteVisit:' + req.params.visit_id);
-    getCollection(ctx).remove({
-        _id: new ctx.mongodb.ObjectID(req.params.visit_id)
-    }, function(err, obj) {
-        if (err) {
-            res.send(500, err);
-            throw err;
-        }
-        res.send(200, {
-            recordsDeleted: obj
-        });
-    });
+    ctx.deleteObj('visit', req.params.visit_id, ctx, req, res);
 };
 
 exports.getByPlace = function(ctx, req, res) {
@@ -63,45 +43,18 @@ exports.getByPlace = function(ctx, req, res) {
 };
 
 exports.getById = function(ctx, req, res) {
-    console.log('getById:' + req.params.visit_id);
-    getCollection(ctx).find({
-        _id: new ctx.mongodb.ObjectID(req.params.visit_id)
-    }).toArray(function(err, result) {
-        if (err) {
-            res.send(500, err);
-            throw err;
-        }
-        if (result.length === 0) {
-            res.send(404);
-            return;
-        }
-        res.send(200, result);
-    });
+    ctx.getById('visit', req.params.visit_id, ctx, req, res);
 };
 
 exports.addNewVisit = function(ctx, req, res) {
-    var newVisit = req.body.visit;
-    console.log('addNewVisit:' + newVisit.place);
-    if (!newVisit.place) {
+    if (!req.body.visit.place) {
         res.send(400, {
             message: "You must specify the place ID"
         });
         return;
     }
-    newVisit.place = new ctx.mongodb.ObjectID(newVisit.place);
-    delete newVisit.id;
-    getCollection(ctx).insert(newVisit, function(err, obj) {
-        var result;
-        if (err) {
-            res.send(500, err);
-            throw err;
-        }
-        result = obj[0];
-        ctx.convertToExternal(result);
+    ctx.createNew('visit', ctx, req, res, function(result) {
         result.place = result.place.toString();
-        res.send(200, {
-            visit: result
-        });
     });
 };
 

@@ -11,14 +11,7 @@ context = {
     visits: visits,
     diners: diners,
     mongodb: mongodb,
-    newId: function(obj) {
-        obj._id = new mongodb.ObjectID();
-        return obj;
-    },
-    convertToExternal: function(item) {
-        item.id = item._id.toString();
-        delete item._id;
-    }
+    api: require('./api.js')
 };
 
 function preFilter(req, res, next) {
