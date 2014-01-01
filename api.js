@@ -1,8 +1,3 @@
-exports.newId = function(obj) {
-    obj._id = new mongodb.ObjectID();
-    return obj;
-};
-
 exports.convertToExternal = function(item) {
     item.id = item._id.toString();
     delete item._id;
