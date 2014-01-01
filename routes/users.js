@@ -24,7 +24,7 @@ exports.initialize = function(ctx) {
                     throw err;
                 }
                 if (result.length === 0) {
-                    console.log("Creating default admin user...  please change password ASAP")
+                    console.log("Creating default admin user...  please change password ASAP");
                     context.db.collection('users').insert({
                         username: "admin",
                         basicAuth: "YWRtaW46YWRtaW4=", // admin:admin
@@ -39,7 +39,7 @@ exports.initialize = function(ctx) {
             });
         }
     });
-}
+};
 
 exports.getUsers = function(req, res) {
     console.log('getUsers()');
@@ -62,7 +62,9 @@ exports.getById = function(req, res) {
     context.api.getById('user', req.params.user_id, context, req, res);
 };
 
-exports.svc = {}
+//
+// services
+exports.svc = {};
 
 exports.svc.getAdmin = function(next) {
     context.db.collection('users').find({
@@ -73,8 +75,8 @@ exports.svc.getAdmin = function(next) {
         }
         next(result);
     });
-}
+};
 
-exports.svc.getUser = function(req,res,next) {
-	var id= new context.req.params.user_id
-}
+exports.svc.getUser = function(id, next) {
+    // var id = new context.req.params.user_id
+};

@@ -15,7 +15,6 @@ exports.initialize = function(ctx) {
 };
 
 exports.getPlaces = function(req, res) {
-    console.log('getPlaces()');
     context.api.getCollection('places', context, req, res);
 };
 

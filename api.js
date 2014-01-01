@@ -4,7 +4,6 @@ exports.convertToExternal = function(item) {
 };
 
 exports.getCollection = function(name, ctx, req, res, beforeSend) {
-    console.log('getCollection()');
     ctx.db.collection(name).find().limit(100).toArray(function(err, result) {
         var response = {};
         if (err) {
