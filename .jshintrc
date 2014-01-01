@@ -1,6 +1,6 @@
 {
     "node": true,
-    "browser": true,
+    "browser": false,
     "esnext": true,
     "bitwise": false,
     "curly": false,
@@ -13,12 +13,5 @@
     "undef": true,
     "strict": false,
     "trailing": false,
-    "smarttabs": true,
-    "globals": {
-        "LunchClient": true,
-        "jQuery": true,
-        "Ember": true,
-        "Handlebars": true,
-        "DS": true
-    }
+    "smarttabs": true
 }
