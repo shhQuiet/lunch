@@ -7,7 +7,7 @@ module.exports = function(grunt) {
                 jshintrc: '.jshintrc'
             },
             all: [
-                'Gruntfile.js', 'server.js', 'lunch.js', 'routes/*'
+                '*.js', 'routes/*.js'
             ]
         }
     });
