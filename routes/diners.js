@@ -7,11 +7,11 @@ function getCollection(ctx) {
     }
     coll = ctx.db.collection(collName);
     return coll;
-};
+}
 
 exports.initialize = function(ctx) {
 
-}
+};
 
 exports.getDiners = function(ctx, req, res) {
     getCollection(ctx).find().toArray(function(err, result) {

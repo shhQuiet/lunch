@@ -11,7 +11,7 @@ function getCollection(ctx) {
 
 exports.initialize = function(ctx) {
 
-}
+};
 
 exports.getVisits = function(ctx, req, res) {
     console.log('getVisits()');
@@ -40,7 +40,7 @@ exports.deleteVisit = function(ctx, req, res) {
             recordsDeleted: obj
         });
     });
-}
+};
 
 exports.getByPlace = function(ctx, req, res) {
     console.log('getByPlace:' + req.params.place_id);
@@ -102,7 +102,7 @@ exports.addNewVisit = function(ctx, req, res) {
         res.send(200, {
             visit: result
         });
-    })
+    });
 };
 
 exports.addNewPlaceVisit = function(ctx, req, res) {

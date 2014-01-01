@@ -59,7 +59,8 @@ exports.start = function(config) {
 
     app.put('/places/:place_id', preFilter, function(req, res) {
         places.updatePlace(context, req, res);
-    })
+    });
+
     app.delete('/places/:place_id', preFilter, function(req, res) {
         places.deletePlace(context, req, res);
     });
@@ -105,7 +106,8 @@ exports.start = function(config) {
 
     app.put('/diners/:diner_id', preFilter, function(req, res) {
         diners.updateDiner(context, req, res);
-    })
+    });
+
     app.delete('/diners/:diner_id', preFilter, function(req, res) {
         diners.deleteDiner(context, req, res);
     });
@@ -124,4 +126,4 @@ exports.start = function(config) {
         app.listen(port);
         console.log('Database connected, listening at port ' + port);
     });
-}
+};

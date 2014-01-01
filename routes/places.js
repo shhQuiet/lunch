@@ -7,7 +7,7 @@ function getCollection(ctx) {
     }
     coll = ctx.db.collection(collName);
     return coll;
-};
+}
 
 exports.initialize = function(ctx) {
     getCollection(ctx).ensureIndex({
@@ -20,7 +20,7 @@ exports.initialize = function(ctx) {
             throw err;
         }
     });
-}
+};
 
 exports.getPlaces = function(ctx, req, res) {
     console.log('getPlaces()');
