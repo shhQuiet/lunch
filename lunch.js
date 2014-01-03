@@ -9,10 +9,12 @@ var express = require('express'),
 context = {
     places: places,
     visits: visits,
+    users: users,
     mongodb: mongodb,
     api: require('./api.js')
 };
 
+// express app middleware
 var authFilters = {
     admin: function(req, res, next) {
         var auth = req.get('Authorization');
@@ -26,9 +28,6 @@ var authFilters = {
     },
     adminOrSelf: function(req, res, next) {
 
-    },
-    defaultFilter: function(req, res, next) {
-        next();
     }
 };
 
@@ -61,7 +60,7 @@ exports.start = function(config) {
     ///////////////////////////////////////////////////////////////////
     // Places
     //
-    app.get('/places', headerFilter, authFilters.defaultFilter, places.getPlaces);
+    app.get('/places', headerFilter, places.getPlaces);
     app.post('/places', headerFilter, places.createNewPlace);
     app.get('/places/:place_id', headerFilter, places.getById);
     app.put('/places/:place_id', headerFilter, places.updatePlace);
@@ -80,13 +79,13 @@ exports.start = function(config) {
     ///////////////////////////////////////////////////////////////////
     // Users
     //
-    app.get('/users', headerFilter, authFilters.defaultFilter, users.getUsers);
+    app.get('/users', headerFilter, users.getUsers);
     app.post('/users', headerFilter, authFilters.admin, users.createNewUser);
-    app.get('/users/:user_id', headerFilter, authFilters.defaultFilter, users.getById);
-    app.put('/users/:user_id', headerFilter, authFilters.admin, users.updateUser);
+    app.get('/users/:user_id', headerFilter, users.getById);
+    app.put('/users/:user_id', headerFilter, authFilters.adminOrSelf, users.updateUser);
     app.delete('/users/:user_id', headerFilter, authFilters.admin, users.deleteUser);
-    app.get('/users/:user_id/visits', headerFilter, authFilters.defaultFilter);
-    app.post('/users/:user_id/visits', headerFilter, authFilters.defaultFilter);
+    app.get('/users/:user_id/visits', headerFilter);
+    app.post('/users/:user_id/visits', headerFilter, authFilters.adminOrSelf);
 
     ///////////////////////////////////////////////////////////////////
     // Other
