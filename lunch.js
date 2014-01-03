@@ -18,9 +18,9 @@ context = {
 var authFilters = {
     admin: function(req, res, next) {
         var auth = req.get('Authorization');
-        var admin = users.svc.getAdmin(function() {
+        users.svc.getAdmin(function(admin) {
             if (auth !== admin.basicAuth) {
-                req.send(401);
+                res.send(401);
                 return;
             }
             next();
