@@ -41,9 +41,15 @@ exports.initialize = function(ctx) {
     });
 };
 
+function beforeUserSend(users) {
+    users.forEach(function(user) {
+        delete user.basicAuth; // hide the auth for security.
+    });
+}
+
 exports.getUsers = function(req, res) {
     console.log('getUsers()');
-    context.api.getCollection('users', context, req, res);
+    context.api.getCollection('users', context, req, res, beforeUserSend);
 };
 
 exports.deleteUser = function(req, res) {
@@ -51,15 +57,15 @@ exports.deleteUser = function(req, res) {
 };
 
 exports.updateUser = function(req, res) {
-    context.api.update('user', req.params.user_id, context, req, res);
+    context.api.update('user', req.params.user_id, context, req, res, beforeUserSend);
 };
 
 exports.createNewUser = function(req, res) {
-    context.api.createNew('user', context, req, res);
+    context.api.createNew('user', context, req, res, beforeUserSend);
 };
 
 exports.getById = function(req, res) {
-    context.api.getById('user', req.params.user_id, context, req, res);
+    context.api.getById('user', req.params.user_id, context, req, res, beforeUserSend);
 };
 
 //

@@ -54,18 +54,10 @@ function initialize() {
 }
 
 exports.start = function(config) {
-
     app.configure(function() {
-        // app.use(express.static('public'));
-        // app.use(express.cookieParser());
-        app.use(express.bodyParser());
-        // app.use(express.session({
-        //     secret: 'soooo hungry...'
-        // }));
-        // app.use(passport.initialize());
-        // app.use(passport.session());
-        // app.use(app.router);
+        app.use(express.json());
     });
+
     ///////////////////////////////////////////////////////////////////
     // Places
     //

@@ -19,7 +19,7 @@ exports.getCollection = function(name, ctx, req, res, beforeSend) {
     });
 };
 
-exports.getById = function(name, id, ctx, req, res) {
+exports.getById = function(name, id, ctx, req, res, beforeSend) {
     var newId = null;
     try {
         newId = new ctx.mongodb.ObjectID(id);
@@ -40,12 +40,15 @@ exports.getById = function(name, id, ctx, req, res) {
             return;
         }
         result.forEach(ctx.api.convertToExternal);
+        if (beforeSend) {
+            beforeSend(result);
+        }
         response[name] = result[0];
         res.send(200, response);
     });
 };
 
-exports.update = function(name, id, ctx, req, res) {
+exports.update = function(name, id, ctx, req, res, beforeSend) {
     var obj = req.body[name],
         objCollection;
     delete obj.id;
@@ -63,6 +66,9 @@ exports.update = function(name, id, ctx, req, res) {
         }).toArray(function(err, newColl) {
             var result = {};
             newColl.forEach(ctx.api.convertToExternal);
+            if (beforeSend) {
+                beforeSend(newColl);
+            }
             result[name] = newColl[0];
             res.send(200, result);
         });
