@@ -2,5 +2,6 @@
     "database": {
         "url": "mongodb://localhost:27017/lunch"
     },
-    "PORT": 3000
+    "PORT": 3000,
+    "defaultAdminAuth": "YWRtaW46YWRtaW4="
 }

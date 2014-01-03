@@ -27,7 +27,7 @@ exports.initialize = function(ctx) {
                     console.log("Creating default admin user...  please change password ASAP");
                     context.db.collection('users').insert({
                         username: "admin",
-                        basicAuth: "YWRtaW46YWRtaW4=", // admin:admin
+                        basicAuth: context.config.get('defaultAdminAuth'), // admin:admin
                         isAdmin: true
                     }, function(err, obj) {
                         if (err) {

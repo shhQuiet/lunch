@@ -31,7 +31,7 @@ var authFilters = {
     }
 };
 
-function headerFilter(req, res, next) {
+function corsFilter(req, res, next) {
     var o = req.get('Origin'),
         m = req.get('Access-Control-Request-Method'),
         h = req.get('Access-Control-Request-Headers');
@@ -53,6 +53,7 @@ function initialize() {
 }
 
 exports.start = function(config) {
+    context.config= config;
     app.configure(function() {
         app.use(express.json());
     });
@@ -60,38 +61,38 @@ exports.start = function(config) {
     ///////////////////////////////////////////////////////////////////
     // Places
     //
-    app.get('/places', headerFilter, places.getPlaces);
-    app.post('/places', headerFilter, places.createNewPlace);
-    app.get('/places/:place_id', headerFilter, places.getById);
-    app.put('/places/:place_id', headerFilter, places.updatePlace);
-    app.delete('/places/:place_id', headerFilter, places.deletePlace);
-    app.get('/places/:place_id/visits', headerFilter, visits.getByPlace);
-    app.post('/places/:place_id/visits', headerFilter, visits.addNewPlaceVisit);
+    app.get('/places', corsFilter, places.getPlaces);
+    app.post('/places', corsFilter, places.createNewPlace);
+    app.get('/places/:place_id', corsFilter, places.getById);
+    app.put('/places/:place_id', corsFilter, places.updatePlace);
+    app.delete('/places/:place_id', corsFilter, places.deletePlace);
+    app.get('/places/:place_id/visits', corsFilter, visits.getByPlace);
+    app.post('/places/:place_id/visits', corsFilter, visits.addNewPlaceVisit);
 
     ///////////////////////////////////////////////////////////////////
     // Visits
     //
-    app.get('/visits', headerFilter, visits.getVisits);
-    app.post('/visits', headerFilter, visits.addNewVisit);
-    app.get('/visits/:visit_id', headerFilter, visits.getById);
-    app.delete('/visits/:visit_id', headerFilter, visits.deleteVisit);
+    app.get('/visits', corsFilter, visits.getVisits);
+    app.post('/visits', corsFilter, visits.addNewVisit);
+    app.get('/visits/:visit_id', corsFilter, visits.getById);
+    app.delete('/visits/:visit_id', corsFilter, visits.deleteVisit);
 
     ///////////////////////////////////////////////////////////////////
     // Users
     //
-    app.get('/users', headerFilter, users.getUsers);
-    app.post('/users', headerFilter, authFilters.admin, users.createNewUser);
-    app.get('/users/:user_id', headerFilter, users.getById);
-    app.put('/users/:user_id', headerFilter, authFilters.adminOrSelf, users.updateUser);
-    app.delete('/users/:user_id', headerFilter, authFilters.admin, users.deleteUser);
-    app.get('/users/:user_id/visits', headerFilter);
-    app.post('/users/:user_id/visits', headerFilter, authFilters.adminOrSelf);
+    app.get('/users', corsFilter, users.getUsers);
+    app.post('/users', corsFilter, authFilters.admin, users.createNewUser);
+    app.get('/users/:user_id', corsFilter, users.getById);
+    app.put('/users/:user_id', corsFilter, authFilters.adminOrSelf, users.updateUser);
+    app.delete('/users/:user_id', corsFilter, authFilters.admin, users.deleteUser);
+    app.get('/users/:user_id/visits', corsFilter);
+    app.post('/users/:user_id/visits', corsFilter, authFilters.adminOrSelf);
 
     ///////////////////////////////////////////////////////////////////
     // Other
     //
 
-    app.options('*', headerFilter, function(req, res) {
+    app.options('*', corsFilter, function(req, res) {
         res.send(200);
     });
 
