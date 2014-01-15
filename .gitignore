@@ -3,3 +3,4 @@ push.sh
 logs.sh
 run_remote_db.sh
 README.html
+.idea
