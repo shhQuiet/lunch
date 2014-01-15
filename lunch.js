@@ -18,8 +18,17 @@ context = {
 var authFilters = {
     admin: function(req, res, next) {
         var auth = req.get('Authorization');
+        if (!auth) {
+            res.send(401);
+            return;
+        }
         users.svc.getAdmin(function(admin) {
-            if (auth !== admin.basicAuth) {
+            if (admin.length === 0) {
+                console.log("No admin user defined!  Restart server to create!");
+                res.send(401);
+                return;
+            }
+            if (auth !== admin[0].basicAuth) {
                 res.send(401);
                 return;
             }
@@ -31,10 +40,25 @@ var authFilters = {
     }
 };
 
+function inspectRequest(req) {
+    var result = [];
+    result.push('-------------------------------------------');
+    result.push('Method:' + req.method);
+    result.push('Origin:' + req.get('Origin'));
+    result.push('Access-Control-Request-Method:' + req.get('Access-Control-Request-Method'));
+    result.push('Access-Control-Request-Headers:' + req.get('Access-Control-Request-Headers'));
+    result.push('Authorization:' + req.get('Authorization:'));
+    result.push('Body:' + JSON.stringify(req.body));
+    console.log(result.join('\n'));
+}
+
 function corsFilter(req, res, next) {
     var o = req.get('Origin'),
         m = req.get('Access-Control-Request-Method'),
         h = req.get('Access-Control-Request-Headers');
+
+    // uncomment for debugging...
+    // inspectRequest(req);
 
     // ask and ye shall receive... (for CORS purposes)
     res.set('Access-Control-Allow-Origin', o);
@@ -53,7 +77,7 @@ function initialize() {
 }
 
 exports.start = function(config) {
-    context.config= config;
+    context.config = config;
     app.configure(function() {
         app.use(express.json());
     });

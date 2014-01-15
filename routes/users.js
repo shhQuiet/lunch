@@ -16,25 +16,15 @@ exports.initialize = function(ctx) {
     // if there is no admin user, create a default...
     exports.svc.getAdmin(function(admin) {
         if (admin.length === 0) {
-            context.db.collection('users').find({
+            console.log("Creating default admin user...  please change password ASAP");
+            context.db.collection('users').insert({
+                username: "admin",
+                basicAuth: context.config.get('defaultAdminAuth'), // admin:admin
                 isAdmin: true
-            }).toArray(function(err, result) {
+            }, function(err, obj) {
                 if (err) {
-                    console.log("Can't read users:" + err);
+                    console.log("Can't create default user!");
                     throw err;
-                }
-                if (result.length === 0) {
-                    console.log("Creating default admin user...  please change password ASAP");
-                    context.db.collection('users').insert({
-                        username: "admin",
-                        basicAuth: context.config.get('defaultAdminAuth'), // admin:admin
-                        isAdmin: true
-                    }, function(err, obj) {
-                        if (err) {
-                            console.log("Can't create default user!");
-                            throw err;
-                        }
-                    });
                 }
             });
         }
@@ -48,7 +38,6 @@ function beforeUserSend(users) {
 }
 
 exports.getUsers = function(req, res) {
-    console.log('getUsers()');
     context.api.getCollection('users', context, req, res, beforeUserSend);
 };
 
@@ -81,8 +70,4 @@ exports.svc.getAdmin = function(next) {
         }
         next(result);
     });
-};
-
-exports.svc.getUser = function(id, next) {
-    // var id = new context.req.params.user_id
 };

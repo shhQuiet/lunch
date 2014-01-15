@@ -77,9 +77,9 @@ exports.update = function(name, id, ctx, req, res, beforeSend) {
 
 exports.createNew = function(name, ctx, req, res, beforeSend) {
     var newObj = req.body[name];
+    newObj._id= new ctx.mongodb.ObjectID();
+    
     var objCollection = ctx.db.collection(name + 's');
-
-    ctx.api.newId(newObj);
     objCollection.insert(newObj, function(err, obj) {
         var response = {};
         if (err) {
