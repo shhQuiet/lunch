@@ -47,7 +47,7 @@ function inspectRequest(req) {
     result.push('Origin:' + req.get('Origin'));
     result.push('Access-Control-Request-Method:' + req.get('Access-Control-Request-Method'));
     result.push('Access-Control-Request-Headers:' + req.get('Access-Control-Request-Headers'));
-    result.push('Authorization:' + req.get('Authorization:'));
+    result.push('Authorization:' + req.get('Authorization'));
     result.push('Body:' + JSON.stringify(req.body));
     console.log(result.join('\n'));
 }
@@ -58,7 +58,7 @@ function corsFilter(req, res, next) {
         h = req.get('Access-Control-Request-Headers');
 
     // uncomment for debugging...
-    // inspectRequest(req);
+    inspectRequest(req);
 
     // ask and ye shall receive... (for CORS purposes)
     res.set('Access-Control-Allow-Origin', o);
@@ -111,6 +111,7 @@ exports.start = function(config) {
     app.delete('/users/:user_id', corsFilter, authFilters.admin, users.deleteUser);
     app.get('/users/:user_id/visits', corsFilter);
     app.post('/users/:user_id/visits', corsFilter, authFilters.adminOrSelf);
+    app.post('/users/check_auth', corsFilter, users.checkAuth);
 
     ///////////////////////////////////////////////////////////////////
     // Other

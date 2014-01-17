@@ -57,6 +57,23 @@ exports.getById = function(req, res) {
     context.api.getById('user', req.params.user_id, context, req, res, beforeUserSend);
 };
 
+exports.checkAuth = function(req, res) {
+    console.log("Checking auth:"+req.get('Authorization'));
+    context.db.collection('users').find({
+        basicAuth: req.get('Authorization:')
+    }).toArray(function(err, result) {
+        if (err) {
+            res.send(500, err.message);
+            throw err;
+        }
+        if (result.length === 0) {
+            res.send(401);
+        } else {
+            res.send(200);
+        }
+    });
+}
+
 //
 // services
 exports.svc = {};
