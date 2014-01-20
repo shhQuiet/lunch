@@ -57,10 +57,17 @@ exports.getById = function(req, res) {
     context.api.getById('user', req.params.user_id, context, req, res, beforeUserSend);
 };
 
-exports.checkAuth = function(req, res) {
-    console.log("Checking auth:"+req.get('Authorization'));
+exports.checkAuth = function(req, res, next) {
+    var auth = req.get('Authorization');
+    if (!auth) {
+        res.send(401);
+        return;
+    }
+
+    auth = auth.match(/Basic (.*)/)[1];
+    console.log("Checking auth:" + auth);
     context.db.collection('users').find({
-        basicAuth: req.get('Authorization:')
+        basicAuth: auth
     }).toArray(function(err, result) {
         if (err) {
             res.send(500, err.message);
@@ -69,7 +76,7 @@ exports.checkAuth = function(req, res) {
         if (result.length === 0) {
             res.send(401);
         } else {
-            res.send(200);
+            next();
         }
     });
 }
