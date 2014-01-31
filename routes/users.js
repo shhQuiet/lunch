@@ -79,7 +79,7 @@ exports.checkAuth = function(req, res, next) {
             next();
         }
     });
-}
+};
 
 //
 // services

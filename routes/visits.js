@@ -21,7 +21,7 @@ exports.getVisits = function(context, req, res) {
 
 exports.updateVisit = function(context, req, res) {
     context.api.update('visit', req.params.visit_id, context, req, res);
-}
+};
 
 exports.deleteVisit = function(context, req, res) {
     context.deleteObj('visit', req.params.visit_id, context, req, res);
