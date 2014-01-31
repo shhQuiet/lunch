@@ -85,12 +85,7 @@ function initialize() {
     });
 }
 
-exports.start = function(config) {
-    context.config = config;
-    app.configure(function() {
-        app.use(express.json());
-    });
-
+function configurePlaces() {
     ///////////////////////////////////////////////////////////////////
     // Places
     //
@@ -100,6 +95,9 @@ exports.start = function(config) {
     app.put('/places/:place_id', corsFilter, authFilters.authenticated, places.updatePlace);
     app.delete('/places/:place_id', corsFilter, authFilters.authenticated, places.deletePlace);
 
+}
+
+function configureVisits() {
     ///////////////////////////////////////////////////////////////////
     // Visits
     //
@@ -109,6 +107,9 @@ exports.start = function(config) {
     app.put('/visits/:visit_id', corsFilter, authFilters.authenticated, visits.updateVisit);
     app.delete('/visits/:visit_id', corsFilter, authFilters.authenticated, visits.deleteVisit);
 
+}
+
+function configureUsers() {
     ///////////////////////////////////////////////////////////////////
     // Users
     //
@@ -120,14 +121,26 @@ exports.start = function(config) {
     app.get('/users/:user_id/visits', corsFilter);
     app.post('/users/:user_id/visits', corsFilter, authFilters.authenticated); // TODO
 
+}
+
+exports.start = function(config) {
+    context.config = config;
+    app.configure(function() {
+        app.use(express.json());
+    });
+
+    configurePlaces();
+    configureVisits();
+    configureUsers();
+    
+    ///////////////////////////////////////////////////////////////////
+    // Other
+    //
+
     // check auth simply returns OK unless the filter catches it.
     app.get('/check_auth', corsFilter, authFilters.authenticated, function(req, res) {
         res.send(200);
     });
-
-    ///////////////////////////////////////////////////////////////////
-    // Other
-    //
 
     app.options('*', corsFilter, function(req, res) {
         res.send(200);
